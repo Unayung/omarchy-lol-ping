@@ -20,6 +20,8 @@ o.bind("ALT + mouse:272", "Ping wheel", hl.dsp.global("pingwheel:wheel"))
 
 Hyprland reloads the file on save. Needs `pw-play` (PipeWire), which Omarchy ships.
 
+To update: `omarchy plugin update io.github.unayung.ping-wheel`, then `omarchy restart shell` (the shell keeps the old QML cached until it restarts).
+
 ## Use
 
 | To | Do this |
