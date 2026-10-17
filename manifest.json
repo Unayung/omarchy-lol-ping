@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "io.github.unayung.ping-wheel",
+  "name": "Ping Wheel",
+  "version": "1.0.0",
+  "author": "Unayung",
+  "description": "MOBA-style ping wheel for the whole desktop: hold Alt, drag, let go on a ping to drop an animated marker with a sound.",
+  "kinds": [
+    "service"
+  ],
+  "entryPoints": {
+    "service": "PingWheel.qml"
+  }
+}

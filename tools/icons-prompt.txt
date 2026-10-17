@@ -1,0 +1,18 @@
+A 3x3 sprite sheet of nine game HUD ping icons for a fantasy MOBA-style desktop toy, on a fully transparent background.
+
+Layout: an invisible 3x3 grid of equal square cells. Exactly one icon per cell, centered in its cell, each icon filling about 70% of its cell, generous empty margin around every icon so nothing touches a cell edge. No grid lines, no cell borders, no background panels, no labels, no text or letters anywhere.
+
+Shared style for all nine, so they read as one set: glossy, slightly 3D emblem icons seen straight on; thick dark navy outline; thin bright inner highlight along the top edges; a bevelled antique-gold rim; one vivid saturated main colour per icon with a soft top-to-bottom gradient; crisp clean shapes that stay legible at 48 pixels; no drop shadow or glow outside the icon itself.
+
+Row 1, left to right:
+1. Danger, crimson red (#ff3b55): a triangular warning sigil with a bold exclamation mark cut into it.
+2. Push, emerald green (#35d27a): two stacked chevrons pointing up, like a charging arrowhead.
+3. On My Way, azure blue (#2e8bff): a thick arrow pointing straight down onto a small flat ring on the ground.
+Row 2, left to right:
+4. All In, amber gold (#f2b320): two broad swords crossed in an X, hilts at the bottom.
+5. Assist Me, lime green (#56d43c): a raised open hand, palm forward.
+6. Need Vision, green (#56d43c): a small glowing crystal ward totem on a short stake.
+Row 3, left to right:
+7. Enemy Missing, golden yellow (#f2c518): a single bold question mark symbol (the only glyph allowed in the sheet).
+8. Enemy Vision, crimson red (#ff3b55): a stylised open eye with a vertical slit pupil.
+9. Generic ping, azure blue (#2e8bff): a diamond-shaped map marker gem with a small dot in its centre.
