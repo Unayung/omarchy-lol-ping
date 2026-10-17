@@ -6,12 +6,14 @@ import QtQuick.Effects
 Item {
     id: p
     property var def
+    property string dir: Qt.resolvedUrl("assets").toString()
     property real s: 110
     property int dur: 3200
     readonly property color col: def.color
     readonly property color clear: Qt.rgba(col.r, col.g, col.b, 0)
+    readonly property bool clash: def.art.length === 2   // the official All In: two halves that collide
 
-    function tex(name) { return Qt.resolvedUrl("assets/textures/" + name + ".png") }
+    function tex(name) { return dir + "/textures/" + name + ".png" }
 
     Timer { running: true; interval: p.dur + 150; onTriggered: p.destroy() }
 
@@ -80,26 +82,76 @@ Item {
             Item {
                 id: body
                 width: p.s; height: p.s
-                // pop, then a gentle bob.
+                // pop (or the clash's shake), then a gentle bob.
                 SequentialAnimation {
-                    running: true
+                    running: !p.clash
                     ParallelAnimation {
                         NumberAnimation { target: body; property: "scale"; from: 0.4; to: 1.15; duration: 170; easing.type: Easing.OutQuad }
                         NumberAnimation { target: body; property: "opacity"; from: 0; to: 1; duration: 170 }
                     }
                     NumberAnimation { target: body; property: "scale"; to: 1; duration: 110; easing.type: Easing.InOutQuad }
                 }
+                SequentialAnimation {
+                    running: p.clash
+                    PauseAnimation { duration: 220 }
+                    NumberAnimation { target: body; property: "x"; to: -3; duration: 60 }
+                    NumberAnimation { target: body; property: "x"; to: 3; duration: 60 }
+                    NumberAnimation { target: body; property: "x"; to: -2; duration: 60 }
+                    NumberAnimation { target: body; property: "x"; to: 0; duration: 70 }
+                }
                 SequentialAnimation on y {
                     loops: Animation.Infinite
-                    PauseAnimation { duration: 300 }
+                    PauseAnimation { duration: p.clash ? 500 : 300 }
                     NumberAnimation { to: -5; duration: 800; easing.type: Easing.InOutSine }
                     NumberAnimation { to: 0; duration: 800; easing.type: Easing.InOutSine }
                 }
 
-                Image {
-                    anchors.fill: parent
-                    source: tex(p.def.id)
-                    mipmap: true
+                Repeater {
+                    model: p.def.art
+                    Image {
+                        id: half
+                        required property int index
+                        required property string modelData
+                        width: p.s; height: p.s
+                        source: tex(modelData)
+                        mipmap: true
+                        // All In's halves slide in from the top corners.
+                        ParallelAnimation {
+                            running: p.clash
+                            NumberAnimation { target: half; property: "x"; from: (half.index ? -0.64 : 0.64) * p.s; to: 0; duration: 220; easing.type: Easing.InQuad }
+                            NumberAnimation { target: half; property: "y"; from: -0.64 * p.s; to: 0; duration: 220; easing.type: Easing.InQuad }
+                            NumberAnimation { target: half; property: "opacity"; from: 0; to: 1; duration: 220 }
+                        }
+                    }
+                }
+
+                // The clash flash.
+                Shape {
+                    id: flash
+                    visible: p.clash
+                    x: 0.25 * p.s; y: 0.25 * p.s; width: 0.5 * p.s; height: width
+                    opacity: 0
+                    ShapePath {
+                        strokeColor: "transparent"
+                        fillGradient: RadialGradient {
+                            centerX: 0.25 * p.s; centerY: centerX; focalX: centerX; focalY: centerX; centerRadius: centerX
+                            GradientStop { position: 0; color: "white" }
+                            GradientStop { position: 0.4; color: p.col }
+                            GradientStop { position: 1; color: p.clear }
+                        }
+                        PathAngleArc { centerX: 0.25 * p.s; centerY: centerX; radiusX: centerX; radiusY: centerX; sweepAngle: 360 }
+                    }
+                    SequentialAnimation {
+                        running: p.clash
+                        PauseAnimation { duration: 200 }
+                        ParallelAnimation {
+                            NumberAnimation { target: flash; property: "scale"; from: 0.3; to: 2.2; duration: 350; easing.type: Easing.OutQuad }
+                            SequentialAnimation {
+                                NumberAnimation { target: flash; property: "opacity"; to: 1; duration: 105 }
+                                NumberAnimation { target: flash; property: "opacity"; to: 0; duration: 245 }
+                            }
+                        }
+                    }
                 }
             }
         }

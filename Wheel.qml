@@ -7,7 +7,10 @@ import "wheel.js" as G
 Item {
         id: wheel
         property bool shown
-    property var pings: []
+    // { dir, hub, pings: [{ icon }] }; every path below derives from it in one step, so a pack switch never
+    // mixes one pack's names with the other's directory.
+    property var pack
+    readonly property var icons: pack.pings.map(p => pack.dir + "/textures/" + p.icon + ".png")
         property int hot: -1
         width: G.WHEEL.size; height: G.WHEEL.size
         opacity: shown ? 1 : 0
@@ -15,7 +18,6 @@ Item {
         Behavior on opacity { NumberAnimation { duration: 120; easing.type: Easing.OutQuad } }
         Behavior on scale { NumberAnimation { duration: 120; easing.type: Easing.OutQuad } }
         readonly property real c: G.WHEEL.size / 2
-    function tex(name) { return Qt.resolvedUrl("assets/textures/" + name + ".png") }
 
         Shape {
             anchors.fill: parent
@@ -75,15 +77,15 @@ Item {
         }
 
         Repeater {
-            model: wheel.pings
+            model: wheel.icons
             Image {
                 required property int index
-                required property var modelData
+                required property string modelData
                 readonly property var at: G.polar(G.WHEEL.iconR, -90 + index * 45)
                 readonly property bool isHot: wheel.hot === index
                 x: at[0] - width / 2; y: at[1] - height / 2
                 width: G.WHEEL.iconSize; height: G.WHEEL.iconSize
-                source: tex(modelData.id)
+                source: modelData
                 smooth: true; mipmap: true
                 scale: isHot ? 1.18 : 1
                 Behavior on scale { NumberAnimation { duration: 100 } }
@@ -124,7 +126,7 @@ Item {
         }
         Image {
             x: wheel.c - 20; y: wheel.c - 58; width: 40; height: 40
-            source: tex("generic"); mipmap: true
+            source: wheel.pack.dir + "/textures/" + wheel.pack.hub + ".png"; mipmap: true
         }
         Text {
             anchors.horizontalCenter: parent.horizontalCenter
