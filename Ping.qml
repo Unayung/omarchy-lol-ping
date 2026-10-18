@@ -12,6 +12,8 @@ Item {
     readonly property color col: def.color
     readonly property color clear: Qt.rgba(col.r, col.g, col.b, 0)
     readonly property bool clash: def.art.length === 2   // the official All In: two halves that collide
+    property string tag: ""   // a room member's name under their ping
+    property color tagColor: "white"
 
     function tex(name) { return dir + "/textures/" + name + ".png" }
 
@@ -36,6 +38,27 @@ Item {
             NumberAnimation { to: 0.75; duration: p.dur * 0.10; easing.type: Easing.OutQuad }
             NumberAnimation { to: 0.55; duration: p.dur * 0.75 }
             NumberAnimation { to: 0; duration: p.dur * 0.15 }
+        }
+    }
+
+    // Name tag, as upstream's .ping .tag. PlainText: the name comes from another machine.
+    Rectangle {
+        visible: p.tag !== ""
+        x: -width / 2; y: 0.45 * p.s
+        width: Math.min(name.implicitWidth + 14, 220); height: 18; radius: 4
+        color: Qt.rgba(8 / 255, 12 / 255, 16 / 255, 0.62)
+        Text {
+            id: name
+            anchors.centerIn: parent
+            width: parent.width - 14
+            horizontalAlignment: Text.AlignHCenter
+            text: p.tag; textFormat: Text.PlainText; elide: Text.ElideRight
+            color: p.tagColor; font.pixelSize: 13; font.weight: Font.DemiBold
+            style: Text.Raised; styleColor: "black"
+        }
+        SequentialAnimation on opacity {
+            PauseAnimation { duration: p.dur * 0.87 }
+            NumberAnimation { to: 0; duration: p.dur * 0.13 }
         }
     }
 

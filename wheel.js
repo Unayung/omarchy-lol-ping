@@ -20,3 +20,14 @@ function sector(r0, r1, a0, a1) {
     var p0 = polar(r0, a0), p1 = polar(r1, a0), p2 = polar(r1, a1), p3 = polar(r0, a1);
     return "M" + p0 + " L" + p1 + " A" + r1 + "," + r1 + " 0 0 1 " + p2 + " L" + p3 + " A" + r0 + "," + r0 + " 0 0 0 " + p0 + "Z";
 }
+
+// Room display numbers, as upstream src/main/displayNumbers.ts: #1 is the primary, the rest left→right, then
+// top→bottom. Hyprland has no primary, so it is the screen at 0,0 (else the first). Returns screen indices, #1 first.
+function numberScreens(rects) {
+    var idx = rects.map(function (_, i) { return i; });
+    var first = idx.filter(function (i) { return rects[i].x === 0 && rects[i].y === 0; })[0];
+    if (first === undefined) first = 0;
+    var rest = idx.filter(function (i) { return i !== first; })
+        .sort(function (a, b) { return rects[a].x - rects[b].x || rects[a].y - rects[b].y; });
+    return [first].concat(rest);
+}

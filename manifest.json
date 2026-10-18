@@ -2,13 +2,24 @@
   "schemaVersion": 1,
   "id": "io.github.unayung.ping-wheel",
   "name": "Ping Wheel",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Unayung",
-  "description": "MOBA-style ping wheel for the whole desktop: hold Alt, drag, let go on a ping to drop an animated marker with a sound.",
+  "description": "MOBA-style ping wheel for the whole desktop: hold Alt, drag, let go on a ping to drop an animated marker with a sound. Join lolPing rooms to ping with friends on Windows and Mac.",
   "kinds": [
-    "service"
+    "service",
+    "bar-widget",
+    "panel"
   ],
   "entryPoints": {
-    "service": "PingWheel.qml"
+    "service": "PingWheel.qml",
+    "panel": "SettingsPanel.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Ping Wheel",
+    "description": "Click for settings and rooms; right click pauses.",
+    "category": "System",
+    "allowMultiple": false,
+    "defaultSection": "right"
   }
 }
